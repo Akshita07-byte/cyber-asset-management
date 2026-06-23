@@ -7,6 +7,9 @@ The Cyber Asset Management System is a modern, secure, and scalable web applicat
 Whether it's asset allocation, inventory management, lifecycle tracking, or monitoring asset status, this system offers a seamless and user-friendly experience for effective asset governance.
 
 ---
+## deployment:
+Backend: https://cyber-asset-management-5.onrender.com
+Frontend: cyber-asset-management-mhjb.vercel.app
 
 ## ✨ Key Features
 
