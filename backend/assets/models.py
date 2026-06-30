@@ -53,7 +53,7 @@ class Asset(models.Model):
     def save(self, *args, **kwargs):
         is_new = self.pk is None
         super().save(*args, **kwargs)
-        if is_new or not self.qr_code:
+        if True:
             import qrcode
             from io import BytesIO
             from django.core.files.base import ContentFile
