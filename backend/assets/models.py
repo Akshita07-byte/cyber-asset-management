@@ -2,6 +2,11 @@ from django.db import models
 from django.conf import settings
 from vendors.models import Vendor
 
+import qrcode 
+from io import BytesIO 
+from django.core.files.base import ContentFile
+from PIL import Image
+
 class Asset(models.Model):
     STATUS_CHOICES = [
         ('Available', 'Available'),
@@ -32,8 +37,47 @@ class Asset(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Invoice Management Fields
+    invoice_number = models.CharField(max_length=100, blank=True, null=True)
+    invoice_date = models.DateField(blank=True, null=True)
+    gst = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    invoice_file = models.FileField(upload_to='invoices/', blank=True, null=True)
+  
+    
+    # QR Code Field
+    qr_code = models.FileField(upload_to='qrcodes/', blank=True, null=True)
+
     def __str__(self):
         return f"{self.name} - {self.serial_number}"
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new or not self.qr_code:
+            import qrcode
+            from io import BytesIO
+            from django.core.files.base import ContentFile
+            
+            # Generate QR Code pointing to Asset Details URL
+            frontend_base = "https://cyber-asset-management-mhjb.vercel.app"
+            details_url =  f"https://cyber-asset-management-5.onrender.com/api/assets/{self.pk}/"
+            
+            qr = qrcode.QRCode(
+                version=1,
+                box_size=10,
+                border=4
+            )
+            qr.add_data(details_url)
+            qr.make(fit=True)
+            
+            img = qr.make_image(fill_color="black", back_color="white")
+            buffer = BytesIO()
+            img.save(buffer, format='PNG')
+            
+            # Save to model
+            file_name = f"qr_{self.serial_number}.png"
+            self.qr_code.save(file_name, ContentFile(buffer.getvalue()), save=False)
+            super().save(update_fields=['qr_code'])
 
 
 class AssetAssignment(models.Model):

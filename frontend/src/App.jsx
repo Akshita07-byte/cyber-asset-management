@@ -9,10 +9,12 @@ import Assignments from './pages/Assignments';
 import Maintenance from './pages/Maintenance';
 import Reports from './pages/Reports';
 import SettingsPage from './pages/SettingsPage';
+import QRScanner from './pages/QRScanner';
 
 function AppContent() {
   const { user, loading } = useAuth();
   const [currentTab, setCurrentTab] = useState('dashboard');
+  const [autoOpenAssetId, setAutoOpenAssetId] = useState(null);
 
   if (loading) {
     return (
@@ -52,7 +54,21 @@ function AppContent() {
       case 'dashboard':
         return <Dashboard setCurrentTab={setCurrentTab} />;
       case 'assets':
-        return <AssetList />;
+        return (
+          <AssetList 
+            autoOpenAssetId={autoOpenAssetId}
+            onClearAutoOpen={() => setAutoOpenAssetId(null)}
+          />
+        );
+      case 'scanner':
+        return (
+          <QRScanner 
+            onScanSuccess={(assetId) => {
+              setAutoOpenAssetId(assetId);
+              setCurrentTab('assets');
+            }}
+          />
+        );
       case 'vendors':
         return <Vendors />;
       case 'assignments':

@@ -11,6 +11,7 @@ class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
         fields = '__all__'
+        read_only_fields = ('qr_code',)
 
 
 class AssetAssignmentSerializer(serializers.ModelSerializer):

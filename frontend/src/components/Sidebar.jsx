@@ -11,7 +11,8 @@ import {
   LogOut, 
   Sun, 
   Moon,
-  UserCheck
+  UserCheck,
+  QrCode
 } from 'lucide-react';
 
 const Sidebar = ({ currentTab, setCurrentTab }) => {
@@ -34,6 +35,7 @@ const Sidebar = ({ currentTab, setCurrentTab }) => {
   const navItems = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, roles: ['Admin', 'Manager', 'Employee'] },
     { id: 'assets', name: 'Asset Management', icon: Laptop, roles: ['Admin', 'Manager', 'Employee'] },
+    { id: 'scanner', name: 'Scan QR Code', icon: QrCode, roles: ['Admin', 'Manager', 'Employee'] },
     { id: 'vendors', name: 'Vendors Directory', icon: Building2, roles: ['Admin', 'Manager', 'Employee'] },
     { id: 'assignments', name: 'Assignments', icon: ClipboardList, roles: ['Admin', 'Manager', 'Employee'] },
     { id: 'maintenance', name: 'Maintenance Center', icon: Wrench, roles: ['Admin', 'Manager', 'Employee'] },

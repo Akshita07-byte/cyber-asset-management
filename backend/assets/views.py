@@ -12,10 +12,14 @@ from audit.utils import log_action
 from audit.models import AuditLog
 from audit.serializers import AuditLogSerializer
 
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.permissions import AllowAny
+
 class AssetViewSet(viewsets.ModelViewSet):
     queryset = Asset.objects.all().order_by('-created_at')
     serializer_class = AssetSerializer
-    permission_classes = [ReadOnlyOrAdminManager]
+    permission_classes = [AllowAny]
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 
     def get_queryset(self):
         queryset = Asset.objects.all().order_by('-created_at')

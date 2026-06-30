@@ -5,3 +5,5 @@ django-cors-headers>=4.0.0
 psycopg2-binary>=2.9.0
 python-dotenv>=1.0.0
 gunicorn
+qrcode>=7.3
+pillow>=10.0.0
