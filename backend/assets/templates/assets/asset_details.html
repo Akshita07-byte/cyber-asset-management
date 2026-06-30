@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ asset.name }}</title>
+    <style>
+        body{
+            font-family:Arial,sans-serif;
+            background:#0f172a;
+            color:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            margin:0;
+        }
+
+        .card{
+            width:450px;
+            background:#1e293b;
+            border-radius:15px;
+            padding:25px;
+            box-shadow:0 0 20px rgba(0,255,255,.3);
+        }
+
+        h1{
+            color:#00e5ff;
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        .row{
+            display:flex;
+            justify-content:space-between;
+            padding:10px 0;
+            border-bottom:1px solid #334155;
+        }
+
+        .label{
+            color:#94a3b8;
+            font-weight:bold;
+        }
+
+        .value{
+            color:white;
+        }
+
+        .status{
+            background:#16a34a;
+            padding:4px 10px;
+            border-radius:20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>{{ asset.name }}</h1>
+
+<div class="row">
+<span class="label">Serial No</span>
+<span class="value">{{ asset.serial_number }}</span>
+</div>
+
+<div class="row">
+<span class="label">Category</span>
+<span class="value">{{ asset.category }}</span>
+</div>
+
+<div class="row">
+<span class="label">Model</span>
+<span class="value">{{ asset.model }}</span>
+</div>
+
+<div class="row">
+<span class="label">Status</span>
+<span class="status">{{ asset.status }}</span>
+</div>
+
+<div class="row">
+<span class="label">Purchase Date</span>
+<span class="value">{{ asset.purchase_date }}</span>
+</div>
+
+<div class="row">
+<span class="label">Price</span>
+<span class="value">₹ {{ asset.price }}</span>
+</div>
+
+<div class="row">
+<span class="label">Vendor</span>
+<span class="value">{{ asset.vendor }}</span>
+</div>
+
+<div class="row">
+<span class="label">Description</span>
+<span class="value">{{ asset.description }}</span>
+</div>
+
+</div>
+
+</body>
+</html>
