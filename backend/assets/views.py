@@ -11,8 +11,8 @@ from users.permissions import ReadOnlyOrAdminManager
 from audit.utils import log_action
 from audit.models import AuditLog
 from audit.serializers import AuditLogSerializer
-from rest_framework.renderers
-import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
+
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny
