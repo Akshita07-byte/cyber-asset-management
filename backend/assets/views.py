@@ -11,22 +11,24 @@ from users.permissions import ReadOnlyOrAdminManager
 from audit.utils import log_action
 from audit.models import AuditLog
 from audit.serializers import AuditLogSerializer
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer , JSONRenderer
 
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import AllowAny
 
 class AssetViewSet(viewsets.ModelViewSet):
+    renderer_classes = [TemplateHTMLRenderer , JSONRenderer]
+    template_name = "assets/asset_details.html"
     queryset = Asset.objects.all().order_by('-created_at')
     serializer_class = AssetSerializer
     permission_classes = [AllowAny]
     parser_classes = (MultiPartParser, FormParser, JSONParser)
-    renderer_classes = [TemplateHTMLRenderer]
+   
 
-def retrieve(self, request, *args, **kwargs):
-    asset = self.get_object()
-    return Response(
+    def retrieve(self, request, *args, **kwargs):
+       asset = self.get_object()
+       return Response(
         {"asset": asset},
         template_name="assets/asset_details.html"
     )
