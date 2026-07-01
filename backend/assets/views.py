@@ -12,6 +12,10 @@ from audit.utils import log_action
 from audit.models import AuditLog
 from audit.serializers import AuditLogSerializer
 from rest_framework.renderers import TemplateHTMLRenderer , JSONRenderer
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from django.shortcuts import get_object_or_404
+
 
 
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
@@ -27,11 +31,11 @@ class AssetViewSet(viewsets.ModelViewSet):
    
 
     def retrieve(self, request, *args, **kwargs):
-       asset = self.get_object()
-       return Response(
-        {"asset": asset},
-        template_name="assets/asset_details.html"
-    )
+        asset = self.get_object()
+        serializer = self.get_serializer(asset)
+        return Response(serializer.data) 
+
+
 
     def get_queryset(self):
         queryset = Asset.objects.all().order_by('-created_at')
@@ -313,3 +317,37 @@ class ExportReportView(APIView):
             return response
             
         return Response({"detail": "Invalid report type."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from reportlab.pdfgen import canvas
+import os
+
+def generate_invoice(request, pk):
+    asset = get_object_or_404(Asset, pk=pk)
+
+    invoice_dir = "media/generated_invoices"
+    os.makedirs(invoice_dir, exist_ok=True)
+
+    filename = f"invoice_{asset.serial_number}.pdf"
+    filepath = os.path.join(invoice_dir, filename)
+
+    c = canvas.Canvas(filepath)
+
+    c.setFont("Helvetica-Bold", 18)
+    c.drawString(180, 800, "CYBER ASSET MANAGEMENT")
+
+    c.setFont("Helvetica", 12)
+    c.drawString(50, 760, f"Invoice No : {asset.invoice_number or 'N/A'}")
+    c.drawString(50, 740, f"Asset Name : {asset.name}")
+    c.drawString(50, 720, f"Serial No : {asset.serial_number}")
+    c.drawString(50, 700, f"Category : {asset.category}")
+    c.drawString(50, 680, f"Vendor : {asset.vendor.name if asset.vendor else 'N/A'}")
+    c.drawString(50, 660, f"Purchase Date : {asset.purchase_date}")
+    c.drawString(50, 640, f"Price : INR {asset.price}")
+    c.drawString(50, 620, f"GST : {asset.gst}%")
+
+    c.save()
+
+    return FileResponse(open(filepath, "rb"), as_attachment=True, filename=filename)

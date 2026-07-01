@@ -43,6 +43,12 @@ class Asset(models.Model):
     gst = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     invoice_file = models.FileField(upload_to='invoices/', blank=True, null=True)
   
+    # Asset Image
+    asset_image = models.ImageField(
+      upload_to='assets/',
+      blank=True,
+      null=True
+)
     
     # QR Code Field
     qr_code = models.FileField(upload_to='qrcodes/', blank=True, null=True)
@@ -60,7 +66,7 @@ class Asset(models.Model):
             
             # Generate QR Code pointing to Asset Details URL
             frontend_base = "https://cyber-asset-management-mhjb.vercel.app"
-            details_url =  f"https://cyber-asset-management-5.onrender.com/api/assets/{self.pk}/"
+            details_url =  f"{frontend_base}/assets/{self.pk}"
             
             qr = qrcode.QRCode(
                 version=1,
